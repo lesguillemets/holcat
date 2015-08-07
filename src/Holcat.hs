@@ -9,3 +9,13 @@ main = do
     TIO.putStr "こんにちは!"
     setHighlight None
     TIO.putStrLn "こんにちは!"
+    mapM_ (\c -> do
+          setBg (Term256 c)
+          putChar ' ') [0..255]
+    setHighlight None
+    putStrLn ""
+    mapM_ (\c -> do
+          setBg (Term8 c)
+          putChar ' ') [0..7]
+    setHighlight None
+    putStrLn ""
