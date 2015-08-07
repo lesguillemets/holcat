@@ -1,21 +1,31 @@
 {-# LANGUAGE OverloadedStrings #-}
-import Data.List
+import qualified Data.ByteString.Char8 as BC
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 
-data Colour = RGB {_r :: Int, _g :: Int, _b :: Int}
 
-data Hi = Hi256 { _fg :: Colour, _bg :: Colour }
+class Colour a where
+    toCode :: a -> BC.ByteString
+    setFg :: a -> IO ()
+    setBg :: a -> IO ()
+
+data RGB = RGB {_r :: Int, _g :: Int, _b :: Int}
+
+instance Colour RGB where
+    toCode (RGB r g b) =  (BC.intercalate ";" . map (BC.pack . show)) [r,g,b]
+    setFg c = BC.putStr $ BC.concat ["\027[38;2;", toCode c, "m"]
+    setBg c = BC.putStr $ BC.concat ["\027[48;2;", toCode c, "m"]
+
+data Hi = Hi256 { _fg :: RGB, _bg :: RGB }
         | None
 
-toSeq :: Hi -> T.Text
-toSeq None = T.pack "\027[0m"
-toSeq (Hi256 (RGB fr fg fb) (RGB br bg bb)) = T.pack $
-    "\027[38;2;" ++ (intercalate ";" . map show) [fr,fg,fb] ++ "m" ++
-    "\027[48;2;" ++ (intercalate ";" . map show) [br,bg,bb] ++ "m"
+setHighlight :: Hi -> IO ()
+setHighlight None = BC.putStr "\027[0m"
+setHighlight (Hi256 fg bg) = do
+    setFg fg; setBg bg
 
 main = do
-    TIO.putStr . toSeq $ Hi256 (RGB 0 243 234) (RGB 34 123 0)
+    setHighlight $ Hi256 (RGB 0 243 234) (RGB 34 123 0)
     TIO.putStr "こんにちは!"
-    TIO.putStrLn . toSeq $ None
+    setHighlight None
     TIO.putStrLn "こんにちは!"
