@@ -1,8 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
+module Colour where
 import qualified Data.ByteString.Char8 as BC
-import qualified Data.Text as T
-import qualified Data.Text.IO as TIO
-
 
 class Colour a where
     toCode :: a -> BC.ByteString
@@ -23,9 +21,3 @@ setHighlight :: Hi -> IO ()
 setHighlight None = BC.putStr "\027[0m"
 setHighlight (Hi256 fg bg) = do
     setFg fg; setBg bg
-
-main = do
-    setHighlight $ Hi256 (RGB 0 243 234) (RGB 34 123 0)
-    TIO.putStr "こんにちは!"
-    setHighlight None
-    TIO.putStrLn "こんにちは!"
