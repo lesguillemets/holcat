@@ -13,7 +13,8 @@ holcat (Config dx dy s v Normal) txt = do
     forM_ (zip [0,dy..] $ T.lines txt) $
         \(y,l) -> do
             forM_ (zip [0,dx..] (T.unpack l)) $ \(x,c) -> do
-                let (r,g,b) = toTrueColour . fromHSV $ (x+y,s,v)
+                let (r,g,b) = toTrueColour . fromHSV $
+                        (fromIntegral $ floor (x+y) `mod` 360,s,v)
                 setFg (TermRGB r g b)
                 putChar c
             clearHl
