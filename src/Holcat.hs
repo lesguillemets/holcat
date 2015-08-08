@@ -9,20 +9,23 @@ import Highlight
 import Config
 
 holcat :: Config -> T.Text -> IO ()
-holcat (Config dx dy s v Normal) txt = do
+holcat (Config dx dy s v style) txt = do
     forM_ (zip [0,dy..] $ T.lines txt) $
         \(y,l) -> do
             forM_ (zip [0,dx..] (T.unpack l)) $ \(x,c) -> do
                 let (r,g,b) = toTrueColour . fromHSV $
                         (fromIntegral $ floor (x+y) `mod` 360,s,v)
-                setFg (TermRGB r g b)
+                case style of
+                    Normal -> setFg (TermRGB r g b)
+                    (Background (rb,gb,bb)) -> do
+                        setFg (TermRGB rb gb bb)
+                        setBg (TermRGB r g b)
                 putChar c
             clearHl
             putStrLn ""
-    clearHl
 
 main = do
     args <- getArgs
     case args of
-        [f] -> TIO.readFile f >>= holcat defaultConfig
+        [f] -> TIO.readFile f >>= holcat defaultBGConfig
         _ -> putStrLn "not implemented yet"

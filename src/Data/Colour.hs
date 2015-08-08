@@ -1,5 +1,6 @@
 module Data.Colour where
 
+type TrueColour = (Int,Int,Int)
 type RGB = (Double, Double, Double)
 type HSV = (Double, Double, Double)
 -- [0,360] \times [0,1] \times [0,1]
@@ -24,6 +25,6 @@ fromHSV (h,s,v) =
                         then v * (1- (1-f)*s)
                         else v * (1- f*s)
 
-toTrueColour :: RGB -> (Int,Int,Int)
+toTrueColour :: RGB -> TrueColour
 toTrueColour (r,g,b) = (f r, f g, f b) where
     f = floor . (* 255)

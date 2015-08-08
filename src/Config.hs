@@ -1,4 +1,5 @@
 module Config where
+import Data.Colour
 data Config = Config {
             dhdx :: Double,
             dhdy :: Double,
@@ -8,7 +9,10 @@ data Config = Config {
         }
 
 data Style = Normal
-           | Background
+           | Background {fgConfig :: TrueColour}
 
 defaultConfig :: Config
 defaultConfig = Config 5 5 1 1 Normal
+
+defaultBGConfig :: Config
+defaultBGConfig = Config 5 5 1 1 (Background (0,0,0))
