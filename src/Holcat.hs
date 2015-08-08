@@ -9,7 +9,7 @@ import Highlight
 import Config
 
 holcat :: Config -> T.Text -> IO ()
-holcat (Config dx dy s v style) txt = do
+holcat (Config dx dy s v style) txt =
     forM_ (zip [0,dy..] $ T.lines txt) $
         \(y,l) -> do
             forM_ (zip [0,dx..] (T.unpack l)) $ \(x,c) -> do
@@ -27,5 +27,5 @@ holcat (Config dx dy s v style) txt = do
 main = do
     args <- getArgs
     case args of
-        [f] -> TIO.readFile f >>= holcat defaultBGConfig
-        _ -> putStrLn "not implemented yet"
+        [] -> TIO.getContents >>= holcat defaultBGConfig
+        (f:_) -> TIO.readFile f >>= holcat defaultBGConfig
