@@ -19,3 +19,5 @@ main = do
           putChar ' ') [0..7]
     setHighlight None
     putStrLn ""
+    withFg (TermRGB 0 123 100) . withBg (TermRGB 255 255 0) $ putStr "hi"
+    putStrLn "there"

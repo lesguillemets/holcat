@@ -36,3 +36,10 @@ setHighlight :: Hi -> IO ()
 setHighlight None = BC.putStr "\027[0m"
 setHighlight (Hi256 fg bg) = do
     setFg fg; setBg bg
+
+-- do IO () with the specified foreground and resets highlight after action.
+withFg :: Colour a => a -> IO () -> IO ()
+withFg c act = do setFg c; act; setHighlight None
+
+withBg :: Colour a => a -> IO () -> IO ()
+withBg c act = do setBg c; act; setHighlight None
