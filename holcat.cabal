@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 
 executable holcat
   main-is:             Holcat.hs
-  other-modules:       Colour
+  other-modules:       Highlight
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.9
                      , text

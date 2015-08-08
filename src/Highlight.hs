@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Colour where
+module Highlight where
 import qualified Data.ByteString.Char8 as BC
 
 class Colour a where

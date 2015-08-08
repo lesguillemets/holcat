@@ -2,7 +2,7 @@
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 
-import Colour
+import Highlight
 
 main = do
     setHighlight $ Hi256 (TermRGB 0 243 234) (TermRGB 34 123 0)
