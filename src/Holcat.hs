@@ -38,6 +38,7 @@ holcatMain ::
     -> Cmd "holcat!" ()
 -- TODO : want to use v
 -- TODO : handle no filename specified
+-- TODO : -i (--interactive)
 -- TODO : sanitise
 holcatMain bf dx dy v s fName = liftIO $
     TIO.readFile (get fName) >>= holcat config
