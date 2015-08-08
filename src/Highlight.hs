@@ -43,3 +43,6 @@ withFg c act = do setFg c; act; setHighlight None
 
 withBg :: Colour a => a -> IO () -> IO ()
 withBg c act = do setBg c; act; setHighlight None
+
+clearHl :: IO ()
+clearHl = setHighlight None
