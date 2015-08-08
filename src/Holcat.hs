@@ -2,6 +2,7 @@
 import Control.Monad (forM_)
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
+import System.Environment (getArgs)
 
 import Data.Colour
 import Highlight
@@ -19,4 +20,8 @@ holcat (Config dx dy s v Normal) txt = do
             putStrLn ""
     clearHl
 
-main = TIO.readFile "src/Holcat.hs" >>= holcat defaultConfig
+main = do
+    args <- getArgs
+    case args of
+        [f] -> TIO.readFile f >>= holcat defaultConfig
+        _ -> putStrLn "not implemented yet"
