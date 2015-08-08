@@ -1,8 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DataKinds #-}
 import Control.Monad (forM_)
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import System.Environment (getArgs)
+
+import Options.Declarative
+import Control.Monad.IO.Class (liftIO)
 
 import Data.Colour
 import Highlight
@@ -24,8 +28,14 @@ holcat (Config dx dy s v style) txt =
             clearHl
             putStrLn ""
 
-main = do
-    args <- getArgs
-    case args of
-        [] -> TIO.getContents >>= holcat defaultBGConfig
-        (f:_) -> TIO.readFile f >>= holcat defaultBGConfig
+holcatMain :: Flag "r" '["rainbow"] "bg/fg" "bg/fg" (Def "fg" String)
+           -> Arg "filename" String
+           -> Cmd "holcat!" ()
+holcatMain bf fName = liftIO $
+    TIO.readFile (get fName) >>= holcat config
+    where
+    config = case get bf of
+        "bg" -> defaultBGConfig
+        _ -> defaultConfig
+
+main = run_ holcatMain
