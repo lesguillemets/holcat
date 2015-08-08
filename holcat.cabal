@@ -20,6 +20,7 @@ executable holcat
   main-is:             Holcat.hs
   other-modules:       Highlight
                      , Data.Colour
+                     , Config
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.9
                      , text
