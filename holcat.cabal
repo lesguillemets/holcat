@@ -21,7 +21,7 @@ executable holcat
   other-modules:       Highlight
                      , Data.Colour
                      , Config
-  other-extensions:    OverLoadedStrings
+  other-extensions:    OverloadedStrings
                      , DataKinds
                      , DisambiguateRecordFields
                      , RecordWildCards
