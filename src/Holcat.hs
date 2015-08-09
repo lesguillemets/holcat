@@ -12,7 +12,23 @@ import Data.Colour
 import Highlight
 import Config
 
+-- TODO: handle double width
 holcat :: Config -> T.Text -> IO ()
+holcat (Config dx dy s v (BackgroundFull (fr,fg,fb))) txt = do
+    print len
+    forM_ (zip [0,dy..] $ T.lines txt) $ \(y,l) -> do
+        setFg (TermRGB fr fg fb)
+        forM_ (take len $ zip [0,dx..] (T.unpack l ++ repeat ' '))
+            $ \(x,c) -> do
+                let (r,g,b) = toTrueColour . fromHSV $
+                        (fromIntegral $ floor (x+y) `mod` 360,s,v)
+                setBg (TermRGB r g b)
+                putChar c
+        clearHl
+        putStrLn ""
+    where
+        len = maximum . map T.length . T.lines $ txt
+
 holcat (Config dx dy s v style) txt =
     forM_ (zip [0,dy..] $ T.lines txt) $
         \(y,l) -> do
@@ -29,7 +45,7 @@ holcat (Config dx dy s v style) txt =
             putStrLn ""
 
 holcatMain ::
-       Flag "r" '["rainbow"] "bg/fg" "bg/fg" (Def "fg" String)
+       Flag "r" '["rainbow"] "bg/fg/bgf" "bg/fg/bgf" (Def "fg" String)
     -> Flag "x" '["dx"] "Double" "dhue/dx default:5" (Def "5" Double)
     -> Flag "y" '["dy"] "Double" "dhue/dy default:5" (Def "5" Double)
     -> Flag "V" '["value"] "Double <-[0.1]" "value" (Def "1" Double)
@@ -45,6 +61,10 @@ holcatMain bf dx dy v s fName = liftIO $
     where
     config = case get bf of
         "bg" -> sanitise $ defaultBGConfig {
+                dhdx = get dx, dhdy = get dy,
+                value = get v, saturation = get s
+                }
+        "bgf" -> sanitise $ defaultBGFConfig {
                 dhdx = get dx, dhdy = get dy,
                 value = get v, saturation = get s
                 }
