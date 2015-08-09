@@ -44,11 +44,11 @@ holcatMain bf dx dy v s fName = liftIO $
     TIO.readFile (get fName) >>= holcat config
     where
     config = case get bf of
-        "bg" -> defaultBGConfig {
+        "bg" -> sanitise $ defaultBGConfig {
                 dhdx = get dx, dhdy = get dy,
                 value = get v, saturation = get s
                 }
-        _ -> defaultConfig {
+        _ -> sanitise $ defaultConfig {
                 dhdx = get dx, dhdy = get dy,
                 value = get v, saturation = get s
                 }
