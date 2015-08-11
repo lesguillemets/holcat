@@ -14,7 +14,7 @@ import Config
 
 -- TODO: handle double width
 holcat :: Config -> T.Text -> IO ()
-holcat (Config dx dy s v (BackgroundFull (fr,fg,fb))) txt = do
+holcat (Config dx dy s v (BackgroundFull (fr,fg,fb))) txt =
     forM_ (zip [0,dy..] $ T.lines txt) $ \(y,l) -> do
         setFg (TermRGB fr fg fb)
         forM_ (take len $ zip [0,dx..] (T.unpack l ++ repeat ' '))
