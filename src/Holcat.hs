@@ -44,19 +44,21 @@ holcat (Config dx dy s v style) txt =
             putStrLn ""
 
 holcatMain ::
-       Flag "r" '["rainbow"] "bg/fg/bgf" "bg/fg/bgf" (Def "fg" String)
+    Flag "f" '["file"] "string" "filename" (Def "" String)
+    -> Flag "r" '["rainbow"] "bg/fg/bgf" "Rainbow mode" (Def "fg" String)
     -> Flag "x" '["dx"] "Double" "dhue/dx default:5" (Def "5" Double)
     -> Flag "y" '["dy"] "Double" "dhue/dy default:5" (Def "5" Double)
     -> Flag "V" '["value"] "Double <-[0.1]" "value" (Def "1" Double)
     -> Flag "s" '["saturation"] "Double <-[0.1]" "saturation" (Def "1" Double)
-    -> Arg "filename" String
     -> Cmd "holcat!" ()
 -- TODO : want to use v
 -- TODO : handle no filename specified
 -- TODO : -i (--interactive)
 -- TODO : sanitise
-holcatMain bf dx dy v s fName = liftIO $
-    TIO.readFile (get fName) >>= holcat config
+holcatMain fName bf dx dy v s = liftIO $
+    case get fName of
+        "" -> TIO.getContents >>= holcat config
+        file -> TIO.readFile file >>= holcat config
     where
     config = case get bf of
         "bg" -> sanitise $ defaultBGConfig {
