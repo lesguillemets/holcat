@@ -52,9 +52,8 @@ holcatMain ::
     -> Flag "s" '["saturation"] "Double <-[0.1]" "saturation" (Def "1" Double)
     -> Cmd "holcat!" ()
 -- TODO : want to use v
--- TODO : handle no filename specified
--- TODO : -i (--interactive)
 -- TODO : sanitise
+-- TODO : specify foreground colour
 holcatMain fName bf dx dy v s = liftIO $
     case get fName of
         "" -> TIO.getContents >>= holcat config
